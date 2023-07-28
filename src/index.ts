@@ -1,6 +1,5 @@
-import { initApp } from './config/app.js'
+import { startApp } from './config/app.js'
 
-const runApp = await initApp()
-await runApp()
+await startApp()
 
 console.debug('App started')

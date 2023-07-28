@@ -5,6 +5,8 @@ import type { HelmetOptions } from 'helmet'
 import helmet from 'helmet'
 
 import { route as root } from '../controllers/root.js'
+import { route as getUser } from '../controllers/get-user.js'
+import type { Database } from './database.js'
 
 export type RouteHandler = (
 	req: Request,
@@ -20,7 +22,7 @@ export type RouteData = {
 }
 
 function setupControllers(app: Express) {
-	for (const controller of [root]) {
+	for (const controller of [root, getUser]) {
 		app[controller.method](
 			controller.path,
 			...(controller.validations ?? []),
@@ -29,7 +31,7 @@ function setupControllers(app: Express) {
 	}
 }
 
-export function initServer() {
+export function startServer(database: Database) {
 	const app = express()
 
 	// Security headers
@@ -56,10 +58,15 @@ export function initServer() {
 		})
 	)
 
+	// Inject dependencies
+	app.use((_, res, next) => {
+		res.locals.db = database
+		return next()
+	})
+
 	setupControllers(app)
 
-	return {
-		runServer: (port: number) =>
-			new Promise(resolve => app.listen(port, () => resolve(port)))
-	}
+	return new Promise(resolve =>
+		app.listen(process.env.PORT, () => resolve(process.env.PORT))
+	)
 }

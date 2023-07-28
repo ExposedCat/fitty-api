@@ -1,18 +1,21 @@
 import { config as loadEnv } from 'dotenv'
-import { initServer } from './server.js'
+import { startServer } from './server.js'
+import { startDatabase } from './database.js'
 
-export async function initApp() {
+export async function startApp() {
 	loadEnv()
 	process.env.PORT = Number(process.env.PORT)
-	for (const env of ['PORT', 'SESSION_SECRET']) {
+	for (const env of [
+		'PORT',
+		'SESSION_SECRET',
+		'DB_CONNECTION_STRING',
+		'DB_COLLECTION_NAME'
+	]) {
 		if (!process.env[env]) {
 			throw new Error(`"${env}" is not specified`)
 		}
 	}
 
-	const { runServer } = initServer()
-
-	return async () => {
-		await runServer(process.env.PORT)
-	}
+	const database = await startDatabase()
+	await startServer(database)
 }
