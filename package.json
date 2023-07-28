@@ -1,0 +1,33 @@
+{
+  "name": "fitty-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExposedCat/fitty-api.git"
+  },
+  "author": "ExposedCat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ExposedCat/fitty-api/issues"
+  },
+  "homepage": "https://github.com/ExposedCat/fitty-api#readme",
+  "devDependencies": {
+    "@typescript-eslint/parser": "^6.2.0",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^8.9.0",
+    "eslint-plugin-functional": "^5.0.8",
+    "eslint-plugin-github": "^4.9.2",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-sonarjs": "^0.19.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.1.6"
+  }
+}
