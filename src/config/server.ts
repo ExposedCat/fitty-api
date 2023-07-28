@@ -1,7 +1,33 @@
 import express from 'express'
+import type { Request, Response, NextFunction, Express } from 'express'
 import session from 'express-session'
 import type { HelmetOptions } from 'helmet'
 import helmet from 'helmet'
+
+import { route as root } from '../controllers/root.js'
+
+export type RouteHandler = (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => void
+
+export type RouteData = {
+	method: 'get' | 'post'
+	handler: RouteHandler
+	path: string
+	validations?: RouteHandler[]
+}
+
+function setupControllers(app: Express) {
+	for (const controller of [root]) {
+		app[controller.method](
+			controller.path,
+			...(controller.validations ?? []),
+			controller.handler
+		)
+	}
+}
 
 export function initServer() {
 	const app = express()
@@ -29,6 +55,8 @@ export function initServer() {
 			extended: true
 		})
 	)
+
+	setupControllers(app)
 
 	return {
 		runServer: (port: number) =>
